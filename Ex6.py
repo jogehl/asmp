@@ -24,7 +24,7 @@ freq_bins = np.fft.fftfreq(N, 1/sample_rate)[:200]
 
 
 
-steps = 10
+steps = 100
 
 doa = doa_estimator(steps,fourier_channel_matrix,freq_bins)
 

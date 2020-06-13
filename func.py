@@ -1,5 +1,5 @@
 import numpy as np
-
+import time
 def array_transfer_vector(u,v,frequency):
 
     positions=1/100 * np.array([[-1.808, -2.39,-0.44],    [3.398,2.163,-2.385],\
@@ -15,12 +15,9 @@ def array_transfer_vector(u,v,frequency):
     data_transfer_vector = np.zeros((16,),dtype=complex)
     w = np.sqrt(1 - u**2 - v**2)
 
+    data_transfer_vector = np.exp(1j * 2.0  * np.pi * (frequency / 343.0) * np.array([u,v,w]) @ positions.T)
 
-    for n in range(0,16):
-        out = np.exp(1j * 2.0  * np.pi * (frequency / 343.0) * np.array([u,v,w]) @ positions[n])
-        data_transfer_vector[n] = out
-        # print(out)
-    # print(data_transfer_vector)
+
     return data_transfer_vector
 
 def array_factor(u,v,frequency):
@@ -28,27 +25,20 @@ def array_factor(u,v,frequency):
 
 def broadband_beamforming(u,v, Z : np.array, freq_bins:np.array):
     BF = np.sum([abs(array_transfer_vector(u,v,freq_bins[k]).conj().T @ Z[:,k])**2 for k in range(200)], axis = 0)
+
     return BF
 
 def doa_estimator(steps, Z, freq_bins):
     bf = [(u,v,broadband_beamforming(u,v,Z, freq_bins)) for v in np.arange(-1, 1, 1/steps) for u in np.arange(-1, 1, 1/steps) if u**2 + v**2 <1]
+
     maximum = max(bf ,key = lambda a: a[2])
 
     u = maximum[0]
     v = maximum[1]
-    w = np.sqrt(1 - u**2 - v**2)
 
-    print(u,v)
-    # azimuth_angle = np.arctan(u/w)
-    # elevation_angle = np.arcsin(v)
+    theta = np.arcsin(np.sqrt(u**2 + v**2))
+    phi = np.arctan2(u,v)
 
-    elevation_angle = np.arccos(w)
-    azimuth_angle = np.arcsin(u/elevation_angle)
+    phi = (phi + 2 * np.pi) % (2*np.pi)
 
-    if azimuth_angle < 0:
-        azimuth_angle = 2*np.pi + azimuth_angle
-
-    if elevation_angle < 0:
-        elevation_angle = 2*np.pi + elevation_angle
-
-    return (azimuth_angle,elevation_angle)
+    return (phi,theta)
