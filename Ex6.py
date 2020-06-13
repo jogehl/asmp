@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from tqdm import tqdm
 from func import broadband_beamforming
+from func import doa_estimator
 
 data_dict = {}
 fourier_channel_dict = {}
@@ -23,21 +24,8 @@ freq_bins = np.fft.fftfreq(N, 1/sample_rate)[:200]
 
 
 
-steps = 50
+steps = 10
 
-u_v_array = np.zeros((2 * steps, 2 * steps))
+doa = doa_estimator(steps,fourier_channel_matrix,freq_bins)
 
-for u in tqdm(range(-steps,steps)):
-    for v in range(-steps,steps):
-        if (u/steps)**2 + (v/steps)**2 < 1:
-            u_v_array[u+steps][v+steps] = broadband_beamforming(u/steps,v/steps,fourier_channel_matrix, freq_bins)
-
-extend = [-1,1,-1,1]
-
-u_v_array = np.flip(u_v_array,axis = 1)
-
-plt.clf()
-im = plt.imshow(u_v_array.T,extent = extend,cmap = "hsv")
-plt.colorbar(im)
-plt.savefig("broadband_beamforming_heatmap.png")
-plt.show()
+print(np.rad2deg(doa[0]),np.rad2deg(doa[1]))

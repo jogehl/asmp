@@ -11,13 +11,17 @@ steps = 100
 
 u_v_array = np.zeros((2 * steps, 2 * steps))
 
-for u in tqdm(range(-steps,steps)):
-    for v in range(-steps,steps):
-        if (u/steps)**2 + (v/steps)**2 <= 1:
-            u_v_array[u+steps][v+steps] = array_factor(u/steps,v/steps,9000)
+for u in tqdm(np.arange(-1,1,1/steps)):
+    for v in np.arange(-1,1,1/steps):
+        if(u**2 + v**2 < 1):
+            u_v_array[int((u+1)*steps)][int((v+1)*steps)]= np.absolute(array_factor(u,v,9000))
+
+extend = [-1,1,-1,1]
+
+u_v_array = np.flip(u_v_array,axis = 0)
 
 plt.clf()
-im = plt.imshow(u_v_array)
+im = plt.imshow(u_v_array,extent = extend,cmap = "hsv")
 plt.colorbar(im)
 plt.savefig("array_factor_heatmap.png")
 plt.show()
