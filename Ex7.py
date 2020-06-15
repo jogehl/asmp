@@ -11,17 +11,20 @@ data_dict_second = {}
 
 sample_rate = wavfile.read("Data/Preprocessed_UAV_1.wav")[0]
 
+# number of fourier bins
 N = 400
 
+# frequencies of fourier bins
 freq_bins = np.fft.fftfreq(N, 1/sample_rate)[:200]
 
+# list for the direction of arrival angles
 doas = []
 
+# read in all data of all the audio tracks
 for n in tqdm(range(0,16)):
     data_dict[n] = wavfile.read("Data/Preprocessed_UAV_" + str(n+1) + ".wav")[-1]
 
-
-
+# compute the fourier transform and the doa estimation over all time steps
 for second in tqdm(range(100)):
 
     for n in range(16):
