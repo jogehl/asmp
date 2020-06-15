@@ -19,6 +19,7 @@ for u in tqdm(range(-steps,steps)):
             for i,ret in enumerate(array_transfer_vector(u/steps,v/steps,9000)):
                 u_v_arrays[i][u+steps][v+steps] = np.angle(ret)
 
+# flip of the arrays so that the axis and the plots are right.
 u_v_arrays = [np.flip(u_v_array,axis = 0) for u_v_array in u_v_arrays]
 
 # Set axis ranges of the plot
