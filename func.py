@@ -1,7 +1,7 @@
 import numpy as np
 import time
 def array_transfer_vector(u,v,frequency):
-
+    # given sensor postions in meter
     positions=1/100 * np.array([[-1.808, -2.39,-0.44],    [3.398,2.163,-2.385],\
                                 [-5.648, 6.876,  3.928],  [-1.789, -9.256, -1.255],\
                                 [5.752,  3.134,  4.559],  [-2.467, -4.962, -6.543],\
@@ -36,6 +36,7 @@ def doa_estimator(steps, Z, freq_bins):
     u = maximum[0]
     v = maximum[1]
 
+    # uv to phi/theta representation
     theta = np.arcsin(np.sqrt(u**2 + v**2))
     phi = np.arctan2(u,v)
 

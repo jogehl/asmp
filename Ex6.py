@@ -10,6 +10,7 @@ fourier_channel_dict = {}
 
 sample_rate = wavfile.read("Data/Preprocessed_UAV_1.wav")[0]
 
+# number of bins for fourier transform
 N = 400
 
 for n in tqdm(range(0,16)):
@@ -26,6 +27,8 @@ freq_bins = np.fft.fftfreq(N, 1/sample_rate)[:200]
 
 steps = 100
 
+# compute the doa estimation
 doa = doa_estimator(steps,fourier_channel_matrix,freq_bins)
 
+# print the angles given by the estimator in degrees
 print(np.rad2deg(doa[0]),np.rad2deg(doa[1]))
