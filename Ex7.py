@@ -16,6 +16,7 @@ N = 400
 freq_bins = np.fft.fftfreq(N, 1/sample_rate)[:200]
 
 doas = []
+u_vs = []
 
 for n in tqdm(range(0,16)):
     data_dict[n] = wavfile.read("Data/Preprocessed_UAV_" + str(n+1) + ".wav")[-1]
@@ -30,10 +31,11 @@ for second in tqdm(range(100)):
 
     fourier_channel_matrix = np.array(list(fourier_channel_dict.values()))
 
-    steps = 50
+    steps = 20
 
-    doa = doa_estimator(steps,fourier_channel_matrix,freq_bins)
+    doa,u_v = doa_estimator(steps,fourier_channel_matrix,freq_bins)
     doas.append((np.rad2deg(doa[0]),np.rad2deg(doa[1])))
+    u_vs.append(u_v)
 
 
 plt.ylim(0,400)
@@ -50,4 +52,10 @@ plt.ylabel("Angle [deg]")
 plt.title("DOA Elevation angle")
 plt.scatter(list(range(100)), [ a[1] for a in doas])
 plt.savefig("doa_elevation.png")
+plt.show()
+
+plt.ylim(-1,1)
+plt.xlim(-1,1)
+plt.scatter([a[0] for a in u_vs], [a[1] for a in u_vs])
+plt.savefig("doa_uv_cooriantes")
 plt.show()

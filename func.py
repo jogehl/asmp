@@ -41,4 +41,4 @@ def doa_estimator(steps, Z, freq_bins):
 
     phi = (phi + 2 * np.pi) % (2*np.pi)
 
-    return (phi,theta)
+    return (phi,theta), (u,v)

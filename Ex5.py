@@ -30,14 +30,13 @@ u_v_array = np.zeros((2 * steps, 2 * steps))
 for u in tqdm(range(-steps,steps)):
     for v in range(-steps,steps):
         if (u/steps)**2 + (v/steps)**2 < 1:
-            u_v_array[u+steps][v+steps] = broadband_beamforming(u/steps,v/steps,fourier_channel_matrix, freq_bins)
+            u_v_array[v+steps][u+steps] = broadband_beamforming(u/steps,v/steps,fourier_channel_matrix, freq_bins)
 
 extend = [-1,1,-1,1]
 
-u_v_array = np.flip(u_v_array,axis = 1)
 
 plt.clf()
-im = plt.imshow(u_v_array.T,extent = extend,cmap = "hsv")
+im = plt.imshow(u_v_array,extent = extend,cmap = "hsv",origin = 'lower')
 plt.colorbar(im)
 plt.savefig("broadband_beamforming_heatmap.png")
 plt.show()
