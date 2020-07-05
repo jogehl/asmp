@@ -34,7 +34,7 @@ for second in tqdm(range(100)):
 
     fourier_channel_matrix = np.array(list(fourier_channel_dict.values()))
 
-    steps = 20
+    steps = 100
 
     doa,u_v = doa_estimator(steps,fourier_channel_matrix,freq_bins)
     doas.append((np.rad2deg(doa[0]),np.rad2deg(doa[1])))

@@ -31,4 +31,4 @@ steps = 100
 doa = doa_estimator(steps,fourier_channel_matrix,freq_bins)
 
 # print the angles given by the estimator in degrees
-print(np.rad2deg(doa[0]),np.rad2deg(doa[1]))
+print(np.rad2deg(doa[0]))
